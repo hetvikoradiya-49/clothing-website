@@ -556,3 +556,6 @@ window.LUXE = {
     FormValidator,
     updateCartItem
 };
+app.get("/", (req, res) => {
+  res.send("API is running");
+});
