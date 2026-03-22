@@ -1,0 +1,382 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shopping Cart - LUXE Fashion{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Login Modal Styles */
+    .login-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .login-modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 2rem;
+        border-radius: 10px;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .login-modal-icon {
+        font-size: 3rem;
+        color: #c9a962;
+        margin-bottom: 1rem;
+    }
+
+    .login-modal h2 {
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .login-modal p {
+        color: #666;
+        margin-bottom: 1.5rem;
+    }
+
+    .login-modal-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .login-modal-btn {
+        padding: 0.8rem 1.5rem;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .login-modal-btn-primary {
+        background: #c9a962;
+        color: white;
+    }
+
+    .login-modal-btn-primary:hover {
+        background: #b8984f;
+    }
+
+    .login-modal-btn-secondary {
+        background: #f8f8f8;
+        color: #333;
+        border: 1px solid #ddd;
+    }
+
+    .login-modal-close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .cart-page {
+        padding: 2rem 0;
+        min-height: 100vh;
+    }
+
+    .cart-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .cart-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .cart-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+    }
+
+    .cart-items {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .cart-item {
+        display: grid;
+        grid-template-columns: 100px 1fr auto auto;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        border-bottom: 1px solid #eee;
+        align-items: center;
+    }
+
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+
+    .cart-item-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    .cart-item-info h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .cart-item-info a {
+        color: #333;
+        text-decoration: none;
+    }
+
+    .cart-item-info a:hover {
+        color: #c9a962;
+    }
+
+    .cart-item-price {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #c9a962;
+    }
+
+    .quantity-form {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .quantity-input {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    .quantity-input button {
+        width: 30px;
+        height: 30px;
+        border: none;
+        background: #f8f8f8;
+        cursor: pointer;
+    }
+
+    .quantity-input input {
+        width: 40px;
+        height: 30px;
+        border: none;
+        text-align: center;
+    }
+
+    .remove-btn {
+        background: none;
+        border: none;
+        color: #dc3545;
+        cursor: pointer;
+        font-size: 1.2rem;
+    }
+
+    .cart-summary {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        padding: 1.5rem;
+        height: fit-content;
+    }
+
+    .cart-summary h3 {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #c9a962;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1rem;
+    }
+
+    .summary-row.total {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 2px solid #eee;
+    }
+
+    .checkout-btn {
+        width: 100%;
+        padding: 1rem;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: background 0.3s ease;
+        text-align: center;
+    }
+
+    .checkout-btn:hover {
+        background: #c9a962;
+    }
+
+    .continue-shopping {
+        display: block;
+        text-align: center;
+        margin-top: 1rem;
+        color: #666;
+        text-decoration: none;
+    }
+
+    .continue-shopping:hover {
+        color: #c9a962;
+    }
+
+    .empty-cart {
+        text-align: center;
+        padding: 4rem;
+    }
+
+    .empty-cart h2 {
+        margin-bottom: 1rem;
+    }
+
+    .empty-cart p {
+        color: #666;
+        margin-bottom: 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .cart-content {
+            grid-template-columns: 1fr;
+        }
+
+        .cart-item {
+            grid-template-columns: 80px 1fr;
+            gap: 1rem;
+        }
+
+        .cart-item-price,
+        .quantity-form {
+            grid-column: 2;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Login Required Modal -->
+<div id="loginModal" class="login-modal">
+    <div class="login-modal-content">
+        <span class="login-modal-close" onclick="closeLoginModal()">&times;</span>
+        <div class="login-modal-icon">🔐</div>
+        <h2>Login Required</h2>
+        <p>You need to login first to proceed with checkout.</p>
+        <div class="login-modal-buttons">
+            <a href="{% url 'login' %}?next={% url 'checkout' %}" class="login-modal-btn login-modal-btn-primary">Login</a>
+            <a href="{% url 'shop' %}" class="login-modal-btn login-modal-btn-secondary">Continue Shopping</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showLoginModal() {
+        document.getElementById('loginModal').style.display = 'block';
+    }
+    
+    function closeLoginModal() {
+        document.getElementById('loginModal').style.display = 'none';
+    }
+    
+    window.onclick = function(event) {
+        var modal = document.getElementById('loginModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+
+<div class="cart-page">
+    <div class="container">
+        <div class="cart-header">
+            <h1>Shopping Cart</h1>
+        </div>
+
+        {% if items %}
+        <div class="cart-content">
+            <div class="cart-items">
+                {% for item in items %}
+                <div class="cart-item">
+                    <img src="{{ item.product.get_image_url }}" alt="{{ item.product.name }}" class="cart-item-image">
+                    
+                    <div class="cart-item-info">
+                        <h3><a href="{% url 'product_detail' item.product.slug %}">{{ item.product.name }}</a></h3>
+                        <p>{{ item.product.category.name }}</p>
+                    </div>
+                    
+                    <div class="cart-item-price">${{ item.total_price }}</div>
+                    
+                    <form action="{% url 'update_cart_item' item.id %}" method="POST" class="quantity-form">
+                        {% csrf_token %}
+                        <div class="quantity-input">
+                            <button type="submit" name="quantity" value="{{ item.quantity|add:'-1' }}">-</button>
+                            <span>{{ item.quantity }}</span>
+                            <button type="submit" name="quantity" value="{{ item.quantity|add:'1' }}">+</button>
+                        </div>
+                    </form>
+                    
+                    <form action="{% url 'remove_cart_item' item.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="remove-btn" title="Remove item">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="cart-summary">
+                <h3>Order Summary</h3>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>${{ total }}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span>${{ total }}</span>
+                </div>
+                {% if user.is_authenticated %}
+                <a href="{% url 'checkout' %}" class="checkout-btn">Proceed to Checkout</a>
+                {% else %}
+                <a href="javascript:void(0)" onclick="showLoginModal()" class="checkout-btn">Proceed to Checkout</a>
+                {% endif %}
+                <a href="{% url 'shop' %}" class="continue-shopping">Continue Shopping</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-cart">
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't added any items to your cart yet.</p>
+            <a href="{% url 'shop' %}" class="btn btn-primary">Start Shopping</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

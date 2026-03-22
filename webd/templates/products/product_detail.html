@@ -1,0 +1,442 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.name }} - LUXE Fashion{% endblock %}
+
+{% block extra_css %}
+<style>
+    .product-detail-page {
+        padding: 2rem 0;
+        min-height: 100vh;
+    }
+
+    .product-detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+    }
+
+    .product-gallery {
+        position: sticky;
+        top: 100px;
+    }
+
+    .main-image {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .product-info h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .product-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        color: #666;
+    }
+
+    .product-price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #c9a962;
+        margin-bottom: 1rem;
+    }
+
+    /* Rating stars */
+    .stars {
+        color: #ffc107;
+        font-size: 1.3rem;
+    }
+    .stars.empty {
+        color: #dee2e6;
+    }
+
+    .avg-rating {
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .reviews-section, .add-review-section {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 1px solid #eee;
+    }
+
+    .review-item {
+        border-bottom: 1px solid #f0f0f0;
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .review-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .review-author {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .review-date {
+        color: #888;
+        font-size: 0.85rem;
+    }
+
+    .review-comment {
+        color: #555;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .star-rating {
+        margin-bottom: 1rem;
+    }
+
+    .stars-container {
+        display: flex;
+        gap: 0.2rem;
+    }
+
+    .stars-container input {
+        display: none;
+    }
+
+    .stars-container label {
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: #dee2e6;
+        transition: color 0.2s;
+    }
+
+    .stars-container input:checked ~ label,
+    .stars-container label:hover,
+    .stars-container label:hover ~ label {
+        color: #ffc107;
+    }
+
+    .review-form textarea {
+        width: 100%;
+        padding: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+        font-family: inherit;
+    }
+
+    .product-description {
+        color: #666;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+    }
+
+    .product-stock {
+        margin-bottom: 1.5rem;
+    }
+
+    .in-stock {
+        color: #28a745;
+    }
+
+    .out-of-stock {
+        color: #dc3545;
+    }
+
+    .quantity-selector {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .quantity-selector label {
+        font-weight: 500;
+    }
+
+    .quantity-input {
+        display: flex;
+        align-items: center;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .quantity-btn {
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: #f8f8f8;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: background 0.3s ease;
+    }
+
+    .quantity-btn:hover {
+        background: #e0e0e0;
+    }
+
+    .quantity-input input {
+        width: 60px;
+        height: 40px;
+        border: none;
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    .add-to-cart-form {
+        margin-bottom: 2rem;
+    }
+
+    .add-to-cart-btn {
+        width: 100%;
+        padding: 1rem 2rem;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .add-to-cart-btn:hover {
+        background: #c9a962;
+    }
+
+    .add-to-cart-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    .product-details-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 2rem;
+    }
+
+    .product-details-list li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .product-details-list li span:first-child {
+        font-weight: 500;
+        color: #666;
+    }
+
+    /* Related Products */
+    .related-products {
+        margin-top: 4rem;
+    }
+
+    .related-products h2 {
+        margin-bottom: 2rem;
+    }
+
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .product-detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .main-image {
+            height: 350px;
+        }
+
+        .product-info h1 {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="product-detail-page">
+    <div class="container">
+        <div class="product-detail-grid">
+            <!-- Product Image -->
+            <div class="product-gallery">
+                <img src="{{ product.get_image_url }}" alt="{{ product.name }}" class="main-image">
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info">
+                <div class="product-meta">
+                    <span>{{ product.category.name }}</span>
+                </div>
+                <h1>{{ product.name }}</h1>
+                <div class="product-price">${{ product.price }}</div>
+                
+                <div class="avg-rating">
+                    Average Rating: {{ avg_rating }}/5 
+                    {% for i in "12345"|make_list %}
+                        <span class="stars{% if forloop.counter > avg_rating|floatformat:0 %} empty{% endif %}">★</span>
+                    {% endfor %}
+                    ({{ reviews|length }} reviews)
+                </div>
+                
+                <p class="product-description">{{ product.description }}</p>
+                
+                <div class="product-stock">
+                    {% if product.stock > 0 %}
+                    <span class="in-stock">✓ In Stock ({{ product.stock }} available)</span>
+                    {% else %}
+                    <span class="out-of-stock">✗ Out of Stock</span>
+                    {% endif %}
+                </div>
+
+                {% if product.stock > 0 %}
+                <form action="{% url 'add_to_cart' product.id %}" method="POST" class="add-to-cart-form">
+                    {% csrf_token %}
+                    <div class="quantity-selector">
+                        <label for="quantity">Quantity:</label>
+                        <div class="quantity-input">
+                            <button type="button" class="quantity-btn" onclick="decreaseQty()">-</button>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="{{ product.stock }}">
+                            <button type="button" class="quantity-btn" onclick="increaseQty()">+</button>
+                        </div>
+                    </div>
+                    <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                </form>
+                {% else %}
+                <button class="add-to-cart-btn" disabled>Out of Stock</button>
+                {% endif %}
+
+                <ul class="product-details-list">
+                    <li>
+                        <span>Category</span>
+                        <span>{{ product.category.name }}</span>
+                    </li>
+                    <li>
+                        <span>SKU</span>
+                        <span>{{ product.id }}</span>
+                    </li>
+                </ul>
+
+                <!-- Reviews Section -->
+                <section class="reviews-section">
+                    <h2>Customer Reviews ({{ reviews|length }})</h2>
+                    {% if reviews %}
+                        {% for review in reviews %}
+                        <div class="review-item">
+                            <div class="review-header">
+                                <span class="stars">
+                                    {% for i in "12345"|make_list %}
+                                        {% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}
+                                    {% endfor %}
+                                </span>
+                                <span class="review-author">{{ review.user.username }}</span>
+                                <span class="review-date">{{ review.created_at|date:"M d, Y" }}</span>
+                            </div>
+                            {% if review.comment %}
+                            <p class="review-comment">{{ review.comment }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No reviews yet. Be the first to leave one!</p>
+                    {% endif %}
+                </section>
+
+                {% if can_review %}
+                <section class="add-review-section">
+                    <h3>Add Your Review</h3>
+                    <form method="post" class="review-form">
+                        {% csrf_token %}
+                        <div class="star-rating">
+                            <label>Rating:</label>
+                            <div class="stars-container">
+                                {% for star in "54321"|make_list %}
+                                    <input type="radio" id="star{{ star }}" name="rating" value="{{ star }}" required>
+                                    <label for="star{{ star }}">★</label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <textarea name="comment" placeholder="Share your thoughts and feedback about this product..." rows="4"></textarea>
+                        <button type="submit" class="add-to-cart-btn">Submit Review</button>
+                    </form>
+                </section>
+                {% elif user.is_authenticated %}
+                    <p class="text-muted">You have already reviewed this product.</p>
+                {% else %}
+                    <div class="alert alert-info">
+                        <p>Login to add your review!</p>
+                        <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        {% if related_products %}
+        <div class="related-products">
+            <h2>Related Products</h2>
+            <div class="products-grid">
+                {% for related in related_products %}
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{ related.get_image_url }}" alt="{{ related.name }}">
+                        <div class="product-overlay">
+                            <a href="{% url 'product_detail' related.slug %}" class="btn btn-white">View Details</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">{{ related.category.name }}</span>
+                        <h3 class="product-name">
+                            <a href="{% url 'product_detail' related.slug %}">{{ related.name }}</a>
+                        </h3>
+                        <span class="product-price">${{ related.price }}</span>
+                        <form action="{% url 'add_to_cart' related.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function increaseQty() {
+        const input = document.getElementById('quantity');
+        const max = parseInt(input.max);
+        if (parseInt(input.value) < max) {
+            input.value = parseInt(input.value) + 1;
+        }
+    }
+
+    function decreaseQty() {
+        const input = document.getElementById('quantity');
+        if (parseInt(input.value) > 1) {
+            input.value = parseInt(input.value) - 1;
+        }
+    }
+</script>
+{% endblock %}

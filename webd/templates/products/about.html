@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - LUXE Fashion{% endblock %}
+
+{% block extra_css %}
+<style>
+    .about-page {
+        padding: 2rem 0;
+    }
+
+    .about-hero {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                    url('https://images.unsplash.com/photo-1558171813-4c088753af8f?w=1920') center/cover no-repeat;
+        padding: 8rem 0;
+        text-align: center;
+        color: white;
+        margin-bottom: 4rem;
+    }
+
+    .about-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .about-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .about-section {
+        margin-bottom: 4rem;
+    }
+
+    .about-section h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+
+    .about-section p {
+        color: #666;
+        line-height: 1.8;
+        margin-bottom: 1rem;
+    }
+
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .value-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+
+    .value-icon {
+        width: 60px;
+        height: 60px;
+        background: #c9a962;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .value-card h3 {
+        margin-bottom: 1rem;
+    }
+
+    .value-card p {
+        color: #666;
+    }
+
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .team-member {
+        text-align: center;
+    }
+
+    .team-member img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+    }
+
+    .team-member h3 {
+        margin-bottom: 0.5rem;
+    }
+
+    .team-member p {
+        color: #888;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-page">
+    <div class="about-hero">
+        <div class="container">
+            <h1>About LUXE Fashion</h1>
+            <p>Discover our story and commitment to excellence</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="about-content">
+            <div class="about-section">
+                <h2>Our Story</h2>
+                <p>
+                    Founded in 2020, LUXE Fashion has been at the forefront of premium clothing design, 
+                    bringing contemporary fashion to discerning individuals around the world. We believe 
+                    that style is a form of self-expression, and our collections are designed to empower 
+                    you to make a statement.
+                </p>
+                <p>
+                    Our team of talented designers works tirelessly to create pieces that blend timeless 
+                    elegance with modern trends, ensuring that every item in our collection is both 
+                    fashionable and functional.
+                </p>
+            </div>
+
+            <div class="about-section">
+                <h2>Our Values</h2>
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <h3>Quality</h3>
+                        <p>We source the finest materials to ensure every piece meets our exacting standards.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3>Sustainability</h3>
+                        <p>We're committed to ethical fashion and minimizing our environmental impact.</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>Customer Focus</h3>
+                        <p>Your satisfaction is our top priority. We're here to help you look and feel your best.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-section">
+                <h2>Our Team</h2>
+                <p>
+                    Meet the creative minds behind LUXE Fashion. Our diverse team brings together 
+                    expertise from around the globe, united by a shared passion for exceptional design.
+                </p>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300" alt="Team Member">
+                        <h3>James Wilson</h3>
+                        <p>Creative Director</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300" alt="Team Member">
+                        <h3>Sarah Chen</h3>
+                        <p>Lead Designer</p>
+                    </div>
+                    <div class="team-member">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300" alt="Team Member">
+                        <h3>Michael Brown</h3>
+                        <p>CEO</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

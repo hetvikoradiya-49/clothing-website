@@ -1,0 +1,373 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}LUXE Fashion - Premium Clothing Brand{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Hero Section Styles */
+    .hero {
+        height: 100vh;
+        min-height: 600px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+                    url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920') center/cover no-repeat;
+        text-align: center;
+        color: white;
+    }
+
+    .hero-content {
+        max-width: 800px;
+        padding: 20px;
+        animation: fadeInUp 1s ease-out;
+    }
+
+    .hero h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        letter-spacing: 2px;
+    }
+
+    .hero p {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+
+    .hero .btn {
+        padding: 1rem 3rem;
+        font-size: 1.1rem;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Section Styles */
+    .section {
+        padding: 5rem 0;
+    }
+
+    .section-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .section-header h2 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .section-header p {
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    /* Products Grid */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .product-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    .product-image {
+        position: relative;
+        height: 300px;
+        overflow: hidden;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-image img {
+        transform: scale(1.1);
+    }
+
+    .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+
+    .product-info {
+        padding: 1.5rem;
+    }
+
+    .product-category {
+        font-size: 0.85rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .product-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0.5rem 0;
+    }
+
+    .product-name a {
+        color: #333;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .product-name a:hover {
+        color: #c9a962;
+    }
+
+    .product-price {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #c9a962;
+    }
+
+    .add-to-cart-btn {
+        width: 100%;
+        padding: 0.8rem;
+        margin-top: 1rem;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .add-to-cart-btn:hover {
+        background: #c9a962;
+    }
+
+    /* Banner Section */
+    .banner {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                    url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920') center/cover no-repeat;
+        padding: 8rem 0;
+        text-align: center;
+        color: white;
+    }
+
+    .banner-new-arrival {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                    url('https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920') center/cover no-repeat;
+    }
+
+    .banner-most-likely {
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+                    url('https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1920') center/cover no-repeat;
+    }
+
+    .banner h2 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .banner p {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+
+    /* Categories */
+    .categories-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .category-card {
+        position: relative;
+        height: 250px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .category-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .category-card:hover img {
+        transform: scale(1.1);
+    }
+
+    .category-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .category-overlay h3 {
+        color: white;
+        font-size: 1.5rem;
+    }
+
+    /* Newsletter Section */
+    .newsletter-section {
+        background: #f8f8f8;
+        padding: 5rem 0;
+    }
+
+    .newsletter-content {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .newsletter-content h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .newsletter-form {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .newsletter-form input {
+        flex: 1;
+        padding: 1rem;
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    .newsletter-form button {
+        padding: 1rem 2rem;
+        background: #333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .newsletter-form button:hover {
+        background: #c9a962;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 2.5rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+        }
+
+        .banner h2 {
+            font-size: 2rem;
+        }
+
+        .newsletter-form {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>New Collection 2024</h1>
+        <p>Discover the latest trends in premium fashion</p>
+        <a href="{% url 'shop' %}" class="btn btn-primary">Shop Now</a>
+    </div>
+</section>
+
+<!-- New Arrival Collection Banner -->
+<section class="banner banner-new-arrival">
+    <div class="container">
+        <h2>New Arrivals</h2>
+        <p>Check out the latest additions to our collection</p>
+        <a href="{% url 'new_arrival' %}" class="btn btn-primary">View Collection</a>
+    </div>
+</section>
+
+<!-- Most Likely Banner -->
+<section class="banner banner-most-likely">
+    <div class="container">
+        <h2>Most Likely</h2>
+        <p>Popular choices among our customers</p>
+        <a href="{% url 'most_likely' %}" class="btn btn-primary">Explore Now</a>
+    </div>
+</section>
+
+<!-- Banner Section -->
+<section class="banner">
+    <div class="container">
+        <h2>Limited Time Offer</h2>
+        <p>Get up to 50% off on selected items</p>
+        <a href="{% url 'shop' %}" class="btn btn-primary">Shop Now</a>
+    </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter-section">
+    <div class="container">
+        <div class="newsletter-content">
+            <h2>Subscribe to Our Newsletter</h2>
+            <p>Get the latest updates on new products and upcoming sales</p>
+            <form action="{% url 'subscribe_newsletter' %}" method="POST" class="newsletter-form">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="Enter your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
